@@ -9,7 +9,7 @@
 
 # os används för ta bort all text i konsolen för nästa steg
 import os
-
+import PySimpleGUI as sg
 
 # VARIABLER
 global ending
@@ -124,7 +124,7 @@ def tutorial():
     global intro
     os.system('cls')
     while True:
-        intro = input("""
+        intro = """
         Hej! Välkommen till Sixten Wilde och Sigge Nilssons Spel:
          ______                          _ _             _             
         |  ____|                        | (_)           | |            
@@ -138,14 +138,30 @@ def tutorial():
         För att välja en handling skriv dess siffra längst ned i konsolen (detta är i konsolen) och tryck på return (ny rad knappen), till exempel:
 
         Starta: 1
-        (först måste du klicka här)→ """)
-        if intro == "1":
-            start()
+        (först måste du klicka här)→ """
+
+
+        window = sg.Window('', layout=[
+        [sg.Text('för att starta klicka START', font='arial 20')],
+        [sg.Button('START')]
+        ])
+
+        while True:
+            event, value = window.read()
+            
+            if event == sg.WIN_CLOSED:
+                break
+
+            if event == 'START':
+                window.close()
+                start()
 
 #starta och starta om programmet
 def start():
     """återställer programmet, initierar sovrummet"""
     while True:
+        global event
+        event = ''
         global ending
         global death
         global försök
@@ -170,12 +186,115 @@ def sovrum():
         global vakenhet
         global tid
 
-        vakenhet = input("""
+        vakenhet = """
         du vaknar, vad gör du?
 
         Somna om: 1.
         Gå upp: 2.
-        → """)
+        → """
+
+        window = sg.Window('Sovrum', layout=[
+        [sg.Text('', key='-snooze-')],
+        [sg.Text('Du vaknar, vad gör du?', font='arial 20')],
+        [sg.Button('somna om'), sg.Button('gå upp')]
+        ])
+
+        while True:
+            event, value = window.read()
+            
+            if event == sg.WIN_CLOSED:
+                break
+
+            if event == 'gå upp':
+                window.close()
+                köket()
+
+            if event == 'somna om':
+                if tid < 10:
+                    tid += 1
+                    window['-snooze-'].update(f'du somnade om {tid} gången')
+
+                if tid == 10:
+                    global ending
+                    if ending.count("Oopsy!") == 0:
+                        ending = ending + ["Oopsy!"]
+
+                    window.close()
+                    window = sg.Window('Sovrum', layout=[
+                    [sg.Text('''
+                    på labbet sitter en överarbetad arbetare och jobbar med en server,
+                    han skulle egentligen fått åka hem för många timmar sedan.
+                    på en annan server börjar en lampa blinka vilket betyder att något importerats?
+                    han ställer sig upp för att se vad som hänt,
+                    han märker inte att en sladd har virat sig runt hans ben,
+                    när han går rycks den ur servern han jobbat på.
+                    Servern med namnet "vintergatan" slocknar.''')],
+                    [sg.Text(f'''Ending: Oopsy!
+                    {len(ending)}/10 endings''', font='arial 20')],
+                    [sg.Button('börja om?')]
+                    ])
+
+                    event, value = window.read()
+
+                    # global val
+                    
+                        
+                    # val = input(f"""
+                    
+                    # Ending: Oopsy!
+                    # {len(ending)}/10 endings hittade
+                    # börja om: 0
+                    # → """)
+                    if event == sg.WIN_CLOSED:
+                        break
+
+                    if event == "börja om?":
+                        window.close()
+                        start()
+
+            if event == 'gå upp':
+                if tid > 2:
+                    if tid > 4:
+                        if death.count("skördad") == 0:
+                            death = death + ["skördad"]
+
+                        window.close()
+                        window = sg.Window('Sovrum', layout=[[sg.Text(f'''
+                        (Du har snoozat så länge att världen omkring dig har förändrats.)
+                        Du vaknar i nån slags pod, en alien märker att du vaknat.
+                        Det trycker på en knapp och metalliska klor kommer ut ur väggarna... och in i dig.''')],
+                        [sg.Text(f'''Death: skördad
+                        {len(death)}/7 Deaths hittade''', font='arial 20')],
+                        [sg.Button('börja om?')]])
+
+                        event, value = window.read()
+
+                        
+                        
+                        if event == "börja om?":
+                            window.close()
+                            start()
+                    else:
+                        if death.count("Wasteland") == 0:
+                            death = death + ["Wasteland"]
+
+                        window.close()
+                        window = sg.Window('Sovrum', layout=[[sg.Text(f'''
+                        (Du har snoozat så länge att världen omkring dig har förändrats.)
+                        Du vaknar på en grå planet täck av damm... det finns inget kvar.''')],
+                        [sg.Text(f'''Death: Wasteland
+                        {len(death)}/7 Deaths hittade''', font='arial 20')],
+                        [sg.Button('börja om?')]])
+
+                        event, value = window.read()
+
+
+                        
+                        if event == "börja om?":
+                            window.close()
+                            start()
+                    
+
         os.system('cls')
 
         if vakenhet == "0":
@@ -188,94 +307,93 @@ def sovrum():
                 """)
                 sovrum()
 
-            while tid == 9:
-                print("""
-                på labbet sitter en överarbetad arbetare och jobbar med en server,
-                han skulle egentligen fått åka hem för många timmar sedan.
-                på en annan server börjar en lampa blinka vilket betyder att något importerats?
-                han ställer sig upp för att se vad som hänt,
-                han märker inte att en sladd har virat sig runt hans ben,
-                när han går rycks den ur servern han jobbat på.
-                Servern med namnet "vintergatan" slocknar.
-                """)
-                global val
-                global ending
-                if ending.count("Oopsy!") == 0:
-                    ending = ending + ["Oopsy!"]
-                val = input(f"""
+            # while tid == 9:
+            #     print("""
+            #     på labbet sitter en överarbetad arbetare och jobbar med en server,
+            #     han skulle egentligen fått åka hem för många timmar sedan.
+            #     på en annan server börjar en lampa blinka vilket betyder att något importerats?
+            #     han ställer sig upp för att se vad som hänt,
+            #     han märker inte att en sladd har virat sig runt hans ben,
+            #     när han går rycks den ur servern han jobbat på.
+            #     Servern med namnet "vintergatan" slocknar.
+            #     """)
+            #     global val
+            #     global ending
+            #     if ending.count("Oopsy!") == 0:
+            #         ending = ending + ["Oopsy!"]
+            #     val = input(f"""
                 
-                Ending: Oopsy!
-                {len(ending)}/10 endings hittade
-                börja om: 0
-                → """)
-                if val == "0":
-                    start()
+            #     Ending: Oopsy!
+            #     {len(ending)}/10 endings hittade
+            #     börja om: 0
+            #     → """)
+            #     if val == "0":
+            #         start()
             
-        while vakenhet == "2":
-            if tid > 2:
-                print("du har snoozat så länge att världen omkring dig har förändrats")
-            while 5 > tid > 2:
-                print("""
-                Du vaknar i nån slags pod, en alien märker att du vaknat.
-                Det trycker på en knapp och metalliska klor kommer ut ur väggarna... och in i dig.
-                """)
-                if death.count("skördad") == 0:
-                    death = death + ["skördad"]
-                val = input(f"""
+        # while vakenhet == "2":
+        #     if tid > 2:
+        #         print("du har snoozat så länge att världen omkring dig har förändrats")
+        #     while 5 > tid > 2:
+        #         print("""
+        #         Du vaknar i nån slags pod, en alien märker att du vaknat.
+        #         Det trycker på en knapp och metalliska klor kommer ut ur väggarna... och in i dig.
+        #         """)
+        #         if death.count("skördad") == 0:
+        #             death = death + ["skördad"]
+        #         val = input(f"""
                 
-                Death: skördad
-                {len(death)}/7 Deaths hittade
-                börja om: 0
-                → """)
-                if val == "0":
-                    start()
+        #         Death: skördad
+        #         {len(death)}/7 Deaths hittade
+        #         börja om: 0
+        #         → """)
+        #         if val == "0":
+        #             start()
 
-            while tid > 4 :
-                print("""
-                Du vaknar på en grå planet täck av damm... det finns inget kvar.
-                """)
-                if ending.count("Wasteland") == 0:
-                    ending = ending + ["Wasteland"]
-                val = input(f"""
+        #     while tid > 4 :
+        #         print("""
+        #         Du vaknar på en grå planet täck av damm... det finns inget kvar.
+        #         """)
+        #         if ending.count("Wasteland") == 0:
+        #             ending = ending + ["Wasteland"]
+        #         val = input(f"""
                 
-                Ending: Wasteland
-                {len(ending)}/10 endings hittade
-                börja om: 0
-                → """)
-                if val == "0":
-                    start()
+        #         Ending: Wasteland
+        #         {len(ending)}/10 endings hittade
+        #         börja om: 0
+        #         → """)
+        #         if val == "0":
+        #             start()
             
-            if tid < 3:
-                print("du går till köket för att äta frukost")
-                köket()
+        #     if tid < 3:
+        #         print("du går till köket för att äta frukost")
+        #         köket()
 #Köket
 def köket():
     """köket, här kan du välja frukost, har liten effekt på spelets slut"""
     global frukost
-    frukost = input("""
+    window = sg.Window('köket', layout=[
+        [sg.Text("""
+    Du går till köket för att äta frukost.
     I köket står en svart tunna med en hazard symbol på,
     den osar en grön gas.
     bakom ugnen ligger en macka som varit där så länge du kan minnas.
     Ur skafferiet nästan lyser ett fantastiskt paket med smaskiga cornflakes från kellogs.
     vad gör du för frukost?
+    """)],
+    [sg.Button('sniffa på tunnan')],
+    [sg.Button('kellogs cornflakes™')],
+    [sg.Button('Mackan')],
+    ])
+    event, value = window.read()
 
-    sniffa på tunnan:   1
-    Mackan:             2
-    kellogs cornflakes™: 3
-    → """)
-    os.system('cls')
     if frukost == "0":
         start()
 
-    while frukost == "2":
-        print("Mycket dåligt val")
+    if event != 'sniffa på tunnan':
+        window.close()
         hallen()
 
-    while frukost == "3":
-        print("Mycket bra val")
-        hallen()
-
-    while frukost == "1":
+    while event == "sniffa på tunnan":
         global droger
         for i in droger:
             if i == "gas":
@@ -283,74 +401,98 @@ def köket():
         droger = droger + ["gas"]
         print(f"du har tagit drogerna {droger}")
 
-        while frukost == "1":
+        while event == "sniffa på tunnan":
             global tunnan
-            tunnan = input("""
-            Hela världen snurrar och du kan inte skilja upp och ned, det känns ganska bra.
+            window.close()
+            window = sg.Window('köket', layout=[
+            [sg.Text("""
+            Allting snurrar, det känns ganska bra?
+            """)],
+            [sg.Button('Quit while youre ahead')],
+            [sg.Button('Drick gift (som en idiot)')],
+            ])
+            event, value = window.read()
 
-            Quit while you're ahead:   1
-            Drick gift (som en idiot) 2
-            → """)
             os.system('cls')
 
             if tunnan == "0":
                 start()
-            while tunnan == "1":
+            while event == "Quit while youre ahead":
+                window.close()
                 köket()
-            while tunnan == "2":
+            while event == "Drick gift (som en idiot)":
                 global spelare
                 spelare = spelare + ["cancer"]
                 print(f"du har {spelare}")
+                window.close()
                 hallen()
 #Hallen
 def hallen():
     global ending
     """vilken ordning vill du utforska världen, korrekt är först skolan sedan äventyr, stanna hemma ger en ending"""
     global dagsplan
-    dagsplan = input("""
-        du funderar på vad du vill göra idag
 
-        gå till skolan:   1
-        gå ut på äventyr: 2
-        stanna hemma:     3
-        → """)
+    window = sg.Window('hallen', layout=[
+        [sg.Text("""
+        Du funderar på vad du vill göra idag?
+        """)],
+    [sg.Button('gå till skolan')],
+    [sg.Button('gå ut på äventyr')],
+    [sg.Button('stanna hemma')]
+    ])
+    event, value = window.read()
+
     os.system('cls')
 
     if dagsplan == "0":
         start()
-    while dagsplan == "3":
-        print("Du stannar hemma och chillar hela dagen")
-        global val
+
+    while event == "stanna hemma":
         global ending
+        window.close()
+        window = sg.Window('hemma', layout=[
+        [sg.Text("Du stannar hemma och chillar hela dagen")],
+        [sg.Text(f'''
+            Ending: Gött!
+            {len(ending)}/10 endings hittade''', font='arial 20')]
+        ])
+        event, value = window.read()        
+
         if ending.count("Gött!") == 0:
             ending = ending + ["Gött!"]
         val = input(f"""
             
-            Ending: Gött!
-            {len(ending)}/10 endings hittade
+
             börja om: 0
             → """)
         if val == "0":
             start()
 
-    while dagsplan == "1":
+    while event == "gå till skolan":
         global skolval
-        skolval = input("""
+        window.close()
+        window = sg.Window('skolan', layout=[
+        [sg.Text("""
         Det är söndag... skolan är stängd.
         Vill du försöka ta dig in ändå?
-
-        inbrott:     1
-        gå hem igen: 2
-        → """)
+        """)],
+        [sg.Button('Inbrott')],
+        [sg.Button('Åka hem igen')],
+        ])
+        event, value = window.read()
+        
         os.system('cls')
         if skolval == "0":
             start()
-        while skolval == "2":
+        while event == "Åka hem igen":
+            window.close()
             hallen()
-        while skolval == "1":
+        while event == "inbrott":
+            window.close()
             skolan()
 
-    while dagsplan == "2":
+    while event == "gå ut på äventyr":
+        window.close()
         gatan()
 
 #skolan
