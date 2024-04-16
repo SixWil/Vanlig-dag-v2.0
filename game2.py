@@ -10,6 +10,7 @@
 # os används för ta bort all text i konsolen för nästa steg
 import os
 import PySimpleGUI as sg
+import time
 
 # VARIABLER
 global ending
@@ -487,7 +488,8 @@ def hallen():
         while event == "Åka hem igen":
             window.close()
             hallen()
-        while event == "inbrott":
+
+        while event == "Inbrott":
             window.close()
             skolan()
 
@@ -501,74 +503,108 @@ def skolan():
     """i skolan kan du uppnå intelligens, det kommer du behöva senare, går du för långt får du en ending"""
     global val
     global korridor
-    korridor = input("""
+    window = sg.Window('skolan', layout=[
+    [sg.Text('',key='-läst-')],
+    [sg.Text("""
     du går runt i skolans korridorer, du kan fortsätta framåt in i ett kontor, vika in till biblioteket, eller vända om.
+    """)],
+    [sg.Button('Lämna skolan'), sg.Button('Kontor'),sg.Button('Biblioteket')]
+    ])
 
-    Lämna skolan:     1
-    Kontor:           2
-    Biblioteket:      3
-    → """)
+    event, value = window.read()
+
     os.system('cls')
     if korridor == "0":
         start()
-    while korridor == "1":
+    while event == "Lämna skolan":
+        window.close()
         hallen()
-    while korridor == "2":
-        print("du stormar in ett kontor, en lärare har hört dig och kommer ut ur sitt näste.")
-        global läraren
-        läraren = input("""
-        BOSS FIGHT: Magister V. Nordlund
+    while event == "Kontor":
+        window.close()
 
-        Ge upp:                1
-        psychological warfare: 2
-        → """)
+        window = sg.Window('skolan', layout=[
+        [sg.Text("""
+        du stormar in ett kontor, en lärare har hört dig och kommer ut ur sitt näste.
+        """)],
+        [sg.Text('''BOSS FIGHT!:
+        Magister V. Nordlund''',font='timesnewroman 33', key='-victor-')],
+        [sg.Button('Ge upp'),sg.Button('Psychological warfare')]
+        ])
+
+        event, value = window.read()
+
         os.system('cls')
         if läraren == "0":
             start()
-        while läraren == "1":
+        while event == "Ge upp":
             global val
             global ending
             if ending.count("Kvarsittning") == 0:
                 ending = ending + ["Kvarsittning"]
-            val = input(f"""
-            
+
+            window.close()
+
+            window = sg.Window('skolan', layout=[
+            [sg.Text(f"""
             Ending: Kvarsittning
             {len(ending)}/10 endings hittade
-            börja om: 0
-            → """)
-            if val == "0":
+            """, font='arial 20')],
+            [sg.Button('börja om?')]
+            ])
+
+            event, value = window.read()
+            
+            if event == "börja om?":
+                window.close()
                 start()
-        while läraren == "2":
+
+        while event == "Psychological warfare":
             global spelare
             while spelare.count("intelligens") == 1:
-                print("du är inte korkad nog att besegra läraren")
+                window.close()
+
+                window = sg.Window('skolan', layout=[
+                [sg.Text("""du är inte korkad nog att besegra läraren
+                """)],
+                [sg.Text(f'''Ending: Kvarsittning
+                {len(ending)}/10 endings hittade''', font='arial 20')]
+                [sg.Button('börja om?'),]
+                ])
+
+                event, value = window.read()
+
                 if ending.count("Kvarsittning") == 0:
                     ending = ending + ["Kvarsittning"]
-                val = input(f"""
-                
-                Ending: Kvarsittning
-                {len(ending)}/10 endings hittade
-                börja om: 0
-                → """)
-                if val == "0":
+
+                if event == "börja om?":
                     start()
                 
-            print("du säger något så dumt att lärarens huvud exploderar")
+            window.close()
+
             if ending.count("Fängelse") == 0:
                 ending = ending + ["Fängelse"]
-            val = input(f"""
-            
-            Ending: Fängelse
-            {len(ending)}/10 endings hittade
-            börja om: 0
-            → """)
-            if val == "0":
+
+            window = sg.Window('skolan', layout=[
+            [sg.Text("""du säger något så dumt att lärarens huvud exploderar
+            """)],
+            [sg.Text(f'''Ending: Fängelse
+            {len(ending)}/10 endings hittade''', font='arial 20')]
+            [sg.Button('börja om?'),]
+            ])
+
+            event, value = window.read()
+
+            if event == "börja om?":
+                window.close()
                 start()
-    while korridor == "3":
+
+            
+    while event == "Biblioteket":
         if spelare.count("intelligens") == 1:
-            print("det finns inget mer att lära sig i biblioteket")
-            skolan()
-        else: biblioteket()
+            window['-läst-'].update("(det finns inget mer att lära dig i biblioteket)")
+        else: 
+            window.close()
+            biblioteket()
 
 #biblioteket
 def biblioteket():
@@ -576,24 +612,30 @@ def biblioteket():
     global death
     global läst
     global böcker
-    while True:
-        böcker = input(f"""
-        Du sätter dig i biblioteket
 
-        läs:               1
-        lämna biblioteket: 2
-        → """)
+    window = sg.Window('biblioteket', layout=[
+        [sg.Text("""Du sätter dig i biblioteket""")],
+        [sg.Text(f"", key='-läsning-')],
+
+        [sg.Button('läs'),],
+        [sg.Button('lämna biblioteket'),]
+        ])
+    while True:
+
+        event, value = window.read()
+
         os.system('cls')
 
         if böcker == "0":
             start()
 
-        while böcker == "2":
+        while event == "lämna biblioteket":
+            window.close()
             skolan()
 
-        if böcker == "1":
+        if event == "läs":
             läst = läst + 1
-            print(f"""
+            window['-läsning-'].update(f"""
             du har läst i {läst} stund(er)
             """)
             
@@ -602,60 +644,82 @@ def biblioteket():
                 if spelare.count("intelligens") == 0:
                     spelare = spelare + ["intelligens"]
 
-                print(f"""
-                du har läst klart boken.
-                du har: {spelare}
-                """)
+                window.close()
+
+                window = sg.Window('biblioteket', layout=[
+                [sg.Text("""du har läst klart boken, du har blivit smart.
+                         Vill du läsa mer eller lämna biblioteket?""")],
+                [sg.Text(f"", key='-läsning-')],
+                [sg.Button('läs'),],
+                [sg.Button('lämna biblioteket'),]
+                ])
+
+                event, value = window.read()
 
                 global nörd
-                nörd = input("""
-                Vill du läsa mer eller lämna biblioteket?
-                Lämna biblioteket: 2
-                Läs mer: 3
-                → """)
+
                 os.system('cls')
 
-                while nörd == "2":
+                while event == "lämna biblioteket":
+                    window.close()
                     skolan()
-                if nörd == "3":
+                if event == "läs":
                     läst = läst + 1
-                    print(f"""
+                    window['-läsning-'].update(f"""
                     du har läst böcker i {läst} stund(er)
                     """)
+                    event, value = window.read()
                 
-            while läst != 10:
-                biblioteket()
+            # while läst != 10:
+            #     biblioteket()
             while läst == 10:
                 global respekt
-                respekt = input("""
-                Ur en hög böcker vaknar en bibliotekarie, du får inte vara här idag
-                BOSS FIGHT: bibliotekarien
 
-                var tyst i biblioteket: 2
-                skrik och slamra:       3
-                → """)
+                window.close()
+
+                window = sg.Window('biblioteket', layout=[
+                [sg.Text("Ur en hög böcker vaknar en bibliotekarie, du får inte vara här idag")],
+                [sg.Text('BOSS FIGHT: bibliotekarien', font='arial 33')],
+                [sg.Button('''var tyst
+                           i biblioteket'''),]
+                [sg.Button('skrik och slamra'),]
+                ])
+
+                event, value = window.read()
+
                 os.system('cls')
                 if respekt == "0":
                     start()
-                if respekt == "2":
-                    print("""
-                    "eh, du läser ju faktiskt riktiga böcker"
-                    hon låter dig slippa undan
-                    """)
+                if event == '''var tyst
+                           i biblioteket''':
+                    # print("""
+                    # "eh, du läser ju faktiskt riktiga böcker"
+                    # hon låter dig slippa undan
+                    # """)
+                    window.close()
                     skolan()
-                while respekt == "3":
+
+                while event == "skrik och slamra":
                     global death
                     if death.count("karma") == 0:
                         death = death + ["karma"]
-                    val = input(f"""
+
+                    window.close()
+
+                    window = sg.Window('biblioteket', layout=[
+                    [sg.Text(f"""
                     din ligism gör att biblioteket reagerar våldsamt,
-                    en hylla tippar över och krossar dig
+                    en hylla tippar över och krossar dig""")],
                     
-                    Death: karma
-                    {len(death)}/7 Deaths hittade
-                    börja om: 0
-                    → """)
-                    if val == "0":
+                    [sg.Text(f'''Death: karma
+                    {len(death)}/7 Deaths hittade''', font='arial 20')],
+                    [sg.Button('börja om'),]
+                    ])
+
+                    event, value = window.read()
+
+                    if event == "börja om":
+                        window.close()
                         start()  
 
 #övergångstället
