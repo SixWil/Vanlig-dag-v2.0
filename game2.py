@@ -567,7 +567,7 @@ def skolan():
                 [sg.Text("""du är inte korkad nog att besegra läraren
                 """)],
                 [sg.Text(f'''Ending: Kvarsittning
-                {len(ending)}/10 endings hittade''', font='arial 20')]
+                {len(ending)}/10 endings hittade''', font='arial 20')],
                 [sg.Button('börja om?'),]
                 ])
 
@@ -588,7 +588,7 @@ def skolan():
             [sg.Text("""du säger något så dumt att lärarens huvud exploderar
             """)],
             [sg.Text(f'''Ending: Fängelse
-            {len(ending)}/10 endings hittade''', font='arial 20')]
+            {len(ending)}/10 endings hittade''', font='arial 20')],
             [sg.Button('börja om?'),]
             ])
 
@@ -620,6 +620,7 @@ def biblioteket():
         [sg.Button('läs'),],
         [sg.Button('lämna biblioteket'),]
         ])
+    
     while True:
 
         event, value = window.read()
@@ -680,8 +681,7 @@ def biblioteket():
                 window = sg.Window('biblioteket', layout=[
                 [sg.Text("Ur en hög böcker vaknar en bibliotekarie, du får inte vara här idag")],
                 [sg.Text('BOSS FIGHT: bibliotekarien', font='arial 33')],
-                [sg.Button('''var tyst
-                           i biblioteket'''),]
+                [sg.Button('''var tyst i biblioteket'''),],
                 [sg.Button('skrik och slamra'),]
                 ])
 
@@ -727,283 +727,339 @@ def gatan():
     global death
     """detta är bara för att retas, fyller ingen funktion alls."""
     global trafik
-    trafik = input("""
-    Du står framför ett övergångställe
 
-    Gå över: 1
-    Vänta : 2
-    → """)
+    window = sg.Window('gata', layout=[
+    [sg.Text(f"""Du står framför ett övergångställe""")],
+    [sg.Button('gå över')],
+    [sg.Button('vänta')],
+    ])
+
+    event, value = window.read()
+    
     os.system('cls')
+
     if trafik == "0":
         start()
-    while trafik == "1":
+    while event == "gå över":
         global val
         global death
         if death.count("påkörd") == 0:
             death = death + ["påkörd"]
-        val = input(f"""
-            
-            Death: påkörd
-            {len(death)}/7 Deaths hittade
-            börja om: 0
-            → """)
-        if val == "0":
+
+        window = sg.Window('gata', layout=[
+        [sg.Text(f"""Death: påkörd
+        {len(death)}/7 Deaths hittade
+        börja om: 0 """, font='arial 20')],
+        [sg.Button('börja om?')],
+        ])
+
+        event, value = window.read()
+        
+        if event == 'börja om?':
+            window.close()
             start()
-    while trafik == "2":
-        print("Vilken tur att du väntade, den föraren var inte lämpad för bilar")
+            
+    while event == 'vänta':
+        window.close()
         parken()
+        
+        ("Vilken tur att du väntade, den föraren var inte lämpad för bilar")
+        
 
 #vägvalet
 def parken():
     "här får du välja riktning igen, korrekt är grottan först sedan staden, stanna ger en ending"
     global ending
     global riktning
-    riktning = input("""
-    du står nu i en park, mot skogen finns en grotta, mot andra sidan finns en öppning till tunnlarna under staden, vart vill du gå?
 
-    Grottan i skogen:       1
-    Tunnlarna under Staden: 2
-    Stanna i parken:        3
-    → """)
+    window = sg.Window('gata', layout=[
+    [sg.Text(''' Vilken tur att du väntade, den föraren var inte lämpad för bilar.
+du står nu i en park, mot skogen finns en grotta, mot andra sidan
+finns en öppning till tunnlarna under staden, vart vill du gå?''')],
+    [sg.Button('Grottan i skogen')],
+    [sg.Button('Tunnlarna under Staden')],
+    [sg.Button('Stanna i parken')],
+    ])
+
+    event, value = window.read()
     os.system('cls')
+
     if riktning == "0":
         start()
-    while riktning == "3":
+
+    while event == "Stanna i parken":
         global val
         global ending
         if ending.count("Mental health") == 0:
             ending = ending + ["Mental health"]
-        val = input(f"""
-        du sitter och njuter av solens värme och fåglarnas dova bakgrunds kvitter
         
-        Ending: Mental health
-        {len(ending)}/10 endings hittade
-        börja om: 0
-        → """)
-        if val == "0":
+        window = sg.Window('gata', layout=[
+        [sg.Text('du sitter och njuter av solens värme och fåglarnas dova bakgrunds kvitter')],
+        [sg.Text(f"""Ending: Mental health
+        {len(ending)}/10 endings hittade """, font='arial 20')],
+        [sg.Button('börja om?')],
+        ])
+
+        event, value = window.read()
+        
+        if event == "börja om?":
+            window.close()
             start()
 
-    while riktning == "1":
+    while event == "Grottan i skogen":
         print("du ramlar ner i grottan")
+        window.close()
         grottan()
 
-    while riktning == "2":
+    while riktning == "Tunnlarna under Staden":
+        window.close()
         kloaken()
 
 #grottan
 def grottan():
     """här kan du gå vänster till staden ändå, du ska gå till höger"""
     global tunnel
-    tunnel = input("""
-    efter ett tag delar grottan sig i två,
-    vart vill du gå?
 
-    vänster mot under staden:  1
-    höger mot under skogen:    2
-    → """)
+    window = sg.Window('grotta', layout=[
+    [sg.Text('''efter ett tag delar grottan sig i två,
+    vart vill du gå?''')],
+    [sg.Button('vänster mot under staden')],
+    [sg.Button('höger mot under skogen')],
+    ])
+
+    event, value = window.read()
+
     os.system('cls')
     if tunnel == "0":
         start()
-    while tunnel == "2":
+
+    while event == "höger mot under skogen":
+        window.close()
         borgen()
-    while tunnel == "1":
+
+    while event == "vänster mot under staden":
+        window.close()
         mötesplatsen()
 
 #vampyrens lya
 def borgen():
     """här slåss du med vampyren, och får grejerna för att besegra gurg i staden, pålen krävs för att besegra vampyren, intelligens krävs för pålen."""
     global inspektion
-    inspektion = input("""
-    tillslut kommer du fram till en borg i grottan,
-    utanför ligger en kristall, vad vill du?
 
-    återvänd åt andra hållet i grottan: 1
-    inbrott i borgen:                   2
-    kolla på kristallen:                3
-    → """)
+    window = sg.Window('grotta', layout=[
+    [sg.Text('''tillslut kommer du fram till en borg i grottan,
+    utanför ligger en kristall, vad vill du? ''')],
+    [sg.Text('', key='kristall')],
+    [sg.Button('återvänd åt andra hållet i grottan')],
+    [sg.Button('inbrott i borgen')],
+    [sg.Button('kolla på kristallen')],
+    ])
+
+    event, value = window.read()
+
     os.system('cls')
     if inspektion == "0":
         start()
-    while inspektion == "1":
+
+    while event == "återvänd åt andra hållet i grottan":
+        window.close()
         grottan()
-    if inspektion == "3":
+    if event == "kolla på kristallen":
         global death
         global ending
         global spelare
         global hittad
+
         hittad = spelare.count("intelligens")
         if hittad > 0:
-            print("""
+
+            window['-kristall-'].update("""
             du är smart nog att inse att kristallen är gjord av trä,
-            detta är ju inte alls en kristall, det är en påle.
+            detta är ju inte alls en kristall, det är en påle. (+ träpåle)
             """)
             if spelare.count("träpåle") == 0:
                 spelare = spelare + ["träpåle"]
             print(f"du har {spelare}")
-            inspektion = input("""
-                vad vill du?
+            # inspektion = input("""
+            #     vad vill du?
 
-                återvänd åt andra hållet i grottan: 1
-                inbrott i borgen:                   2
-                → """)
+            #     återvänd åt andra hållet i grottan: 1
+            #     inbrott i borgen:                   2
+            #     → """)
             os.system('cls')
             if inspektion == "0":
                 start()
             global räkning
             räkning = räkning +1
         if hittad < 0:
-            print("du är inte smart nog för att förstå kristallen, hur du kan bli smartare?..")
-            inspektion = input("""
-                tillslut kommer du fram till en borg i grottan,
-                utanför ligger kristallen, vad vill du?
+            window['-kristall-'].update("du är inte smart nog för att förstå kristallen, hur du kan bli smartare?..")
+            # inspektion = input("""
+            #     tillslut kommer du fram till en borg i grottan,
+            #     utanför ligger kristallen, vad vill du?
 
-                återvänd åt andra hållet i grottan: 1
-                inbrott i borgen:                   2
-                → """)
+            #     återvänd åt andra hållet i grottan: 1
+            #     inbrott i borgen:                   2
+            #     → """)
             os.system('cls')
             if inspektion == "0":
                 start()
-    while inspektion == "2":
-        print("""
-        du fortsätter framåt in i mörkret,
+    while event == "inbrott i borgen":
+        window = sg.Window('grotta', layout=[
+        [sg.Text('''du fortsätter framåt in i mörkret,
         innan du hinner reagera flyger något från skuggorna mot dig,
-        det bränner till i din hals vilket sprider sig genom dina blodådror till hela kroppen
-        """)
+        det bränner till i din hals vilket sprider sig genom dina blodådror till hela kroppen.
+                 (Du är vampyr nu)''')],
+        [sg.Text('BOSS FIGHT: vampyren', font='arial 33')]
+        [sg.Button('ge upp')],
+        [sg.Button('lökig andedräkt')],
+        [sg.Button('träpåle i dess hjärta')],
+        ])
+
+        event, value = window.read()
+
         if spelare.count("vampirism") == 0:
             spelare = spelare + ["vampirism"]
-        print(f"du har {spelare}")
         global vampyren
 
-        vampyren = input("""
-        BOSS FIGHT: vampyren
-
-        ge upp:                 1
-        lökig andedräkt:        2
-        träpåle i dess hjärta: 3
-        → """)
         os.system('cls')
+
         if vampyren == "0":
             start()
-        while vampyren == "1":
+
+        while event != "träpåle i dess hjärta":
             global val
             global death
             if death.count("uppäten av vampyr") == 0:
                 death = death + ["uppäten av vampyr"]
-            val = input(f"""
-            
-            Death: uppäten av vampyr
-            {len(death)}/7 Deaths hittade
-            börja om: 0
-            → """)
-            if val == "0":
-                start()
 
-        while vampyren == "2":
-            if death.count("uppäten av vampyr") == 0:
-                death = death + ["uppäten av vampyr"]
-            val = input(f"""
-            att vampyrer dör av lök är en myt.
-            
-            death: uppäten av vampyr
-            {len(death)}/7 deaths hittade
-            börja om: 0
-            → """)
-            if val == "0":
+            window = sg.Window('grotta', layout=[
+            [sg.Text('', key='-vampyr-')]
+            [sg.Text(f"""
+            Death: uppäten av vampyr
+            {len(death)}/7 Deaths hittade""")],
+            [sg.Button('börja om?')],
+            ])
+
+            if event == 'lökig andedräkt':
+                window['-vampyr-'].update('att vampyrer dör av lök är en myt.')
+
+            event, value = window.read()
+
+            if event == "börja om?":
+                window.close()
                 start()
     
 
-        while vampyren == "3":
+        while event == "träpåle i dess hjärta":
             global tunnel
+
             if spelare.count("träpåle") > 0:
                 global stash
-                stash = input("""
-                vampyren, precis som alla andra, dör om man spettar dem i hjärtat, (du har besegrat vampyren).
-                Bakom vampyren hittar du en klump med spagetti ett piller och en laddad pistol:
+                window = sg.Window('grotta', layout=[
+                [sg.Text('''vampyren, precis som alla andra, dör om man spettar dem i hjärtat, (du har besegrat vampyren).
+                Bakom vampyren hittar du en klump med spagetti ett piller och en laddad pistol''')],
+                [sg.Button('ta grejerna')],
+                [sg.Button('lämna grejerna')],
+                ])
 
-                ta grejerna:    1
-                lämna grejerna: 2
-                → """)
+                event, value = window.read()
+                
+   
                 os.system('cls')
                 if stash == "0":
                     start()
-                while stash == "1":
+                if event == "ta grejerna":
                     global droger
                     droger = droger + ["piller"]
                     print(f"du har tagit drogerna {droger}")
                     spelare = spelare + ["spagetti"]
                     spelare = spelare + ["pistol"]
-                    print(f"du har {spelare}")
+                    # print(f"du har {spelare}")
 
                     global tunnel
-                    tunnel = input("""
-                    vill du kika på andra sidan grottan eller vill du gå hem?
 
-                    gå hem:                                 1
-                    kolla på andra sidan mot under staden:  2
-                    → """)
-                    while tunnel == "2":
-                        mötesplatsen()
-                    while tunnel == "1":
-                        flykt()
+                    
+                window = sg.Window('grotta', layout=[
+                [sg.Text('''vill du kika på andra sidan grottan eller vill du gå hem?''')],
+                [sg.Button('gå hem')],
+                [sg.Button('kolla på andra sidan mot under staden')],
+                ])
+
+                event, value = window.read()
+
+                while event == "kolla på andra sidan mot under staden":
+                    window.close()
+                    mötesplatsen()
+                while tunnel == "gå hem":
+                    window.close()
+                    flykt()
 
                     if tunnel == "0":
                         start()
 
-                while stash == "2":
-                    tunnel = input("""
-                    vill du kika på andra sidan grottan eller vill du gå hem?
+                # while stash == "2":
+                #     tunnel = input("""
+                #     vill du kika på andra sidan grottan eller vill du gå hem?
 
-                    gå hem:                                 1
-                    kolla på andra sidan mot under staden:  2
-                    → """)
-                    while tunnel == "2":
-                        mötesplatsen()
-                        os.system('cls')
-                    while tunnel == "1":
-                        flykt()
+                #     gå hem:                                 1
+                #     kolla på andra sidan mot under staden:  2
+                #     → """)
+                #     while tunnel == "2":
+                #         mötesplatsen()
+                #         os.system('cls')
+                #     while tunnel == "1":
+                #         flykt()
+                        
             if spelare.count("träpåle") < 0:
                 if death.count("uppäten av vampyr") == 0:
                     death = death + ["uppäten av vampyr"]
-                val = input(f"""
-                du har ingen träpåle
-                
+                    
+                window = sg.Window('grotta', layout=[
+                [sg.Text('''(du har ingen träpåle)
                 Death: uppäten av vampyr
-                {len(death)}/7 Deaths hittade
-                börja om: 0
-                → """)
-                if val == "0":
+                {len(death)}/7 Deaths hittade ''', font='arial 20')],
+                [sg.Button('börja om?')],
+                ])
+
+                event, value = window.read()
+
+                if event == "börja om?":
+                    window.close()
                     start()
             
 def flykt():
     global death
     global ending
-    print("du har sätt något du inte borde ha sätt")
+    print("")
     while spelare.count("vampirism") > 0: 
-        print("""
-        dina nya vampyr krafter låter dig ducka undan från skotten något skjutit mot dig,
-        bara en bra stund efter din flykt in i skogen inser du att din hud fräter,
-        """)
         if ending.count("vampyr") == 0:
             ending = ending + ["vampyr"]
-        val = input(f"""
-            
-            Ending: vampyr
-            {len(ending)}/7 endings hittade
-            börja om: 0
-            → """)
-        if val == "0":
+
+        window = sg.Window('skogen', layout=[
+        [sg.Text('''du har sett något du inte borde...
+        dina nya vampyr krafter låter dig ducka undan från skotten något skjutit mot dig,
+        bara en bra stund efter din flykt in i skogen inser du att din hud fräter,''')],
+        [sg.Text(f'''Ending: vampyr
+        {len(ending)}/7 endings hittade''')],
+        [sg.Button('börja om?')],
+        ])
+
+        event, value = window.read()
+
+        if event == "börja om?":
+            window.close()
             start() 
-        else:
-            if death.count("skjuten") == 0:
-                death = death + ["skjuten"]
-            val = input(f"""
+        # else:
+        #     if death.count("skjuten") == 0:
+        #         death = death + ["skjuten"]
+        #     val = input(f"""
             
-            Death: skjuten
-            {len(death)}/10 Deaths hittade
-            börja om: 0
-            → """)
-        if val == "0":
-            start()
+        #     Death: skjuten
+        #     {len(death)}/10 Deaths hittade
+        #     börja om: 0
+        #     → """)
+        # if val == "0":
+        #     start()
 # där tunnlarna och grottorna möts
 def mötesplatsen():
     """där grottan och kloaken möts, är du vampyr kan du gå igenom gallret och få en ending"""
@@ -1016,12 +1072,14 @@ def mötesplatsen():
     galler = spelare.count("vampirism")
     while galler > 0:
         global antiklimax
-        antiklimax = input("""
-        du kan använda dina vampyr krafter för att ta din igenom gallren, eller så kan du fortsätta framåt
+        window = sg.Window('kloak', layout=[
+        [sg.Text('''du kan använda dina vampyr krafter för att ta din igenom några galler, eller så kan du fortsätta framåt''')],
+        [sg.Button('genom gallret')],
+        [sg.Button('fortsätt framåt mot under staden')],
+        ])
 
-        genom gallret:                     1
-        fortsätt framåt mot under staden: 2
-        → """)
+        event, value = window.read()
+        
         os.system('cls')
         if antiklimax == "0":
             start()
