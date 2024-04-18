@@ -579,11 +579,11 @@ def skolan():
                 if event == "börja om?":
                     start()
                 
-            window.close()
 
             if ending.count("Fängelse") == 0:
                 ending = ending + ["Fängelse"]
 
+            window.close()
             window = sg.Window('skolan', layout=[
             [sg.Text("""du säger något så dumt att lärarens huvud exploderar
             """)],
@@ -745,6 +745,7 @@ def gatan():
         global death
         if death.count("påkörd") == 0:
             death = death + ["påkörd"]
+        window.close()
 
         window = sg.Window('gata', layout=[
         [sg.Text(f"""Death: påkörd
@@ -792,7 +793,8 @@ finns en öppning till tunnlarna under staden, vart vill du gå?''')],
         global ending
         if ending.count("Mental health") == 0:
             ending = ending + ["Mental health"]
-        
+
+        window.close()
         window = sg.Window('gata', layout=[
         [sg.Text('du sitter och njuter av solens värme och fåglarnas dova bakgrunds kvitter')],
         [sg.Text(f"""Ending: Mental health
@@ -904,6 +906,7 @@ def borgen():
             if inspektion == "0":
                 start()
     while event == "inbrott i borgen":
+        window.close()
         window = sg.Window('grotta', layout=[
         [sg.Text('''du fortsätter framåt in i mörkret,
         innan du hinner reagera flyger något från skuggorna mot dig,
@@ -931,7 +934,7 @@ def borgen():
             global death
             if death.count("uppäten av vampyr") == 0:
                 death = death + ["uppäten av vampyr"]
-
+            window.close()
             window = sg.Window('grotta', layout=[
             [sg.Text('', key='-vampyr-')]
             [sg.Text(f"""
@@ -955,6 +958,7 @@ def borgen():
 
             if spelare.count("träpåle") > 0:
                 global stash
+                window.close()
                 window = sg.Window('grotta', layout=[
                 [sg.Text('''vampyren, precis som alla andra, dör om man spettar dem i hjärtat, (du har besegrat vampyren).
                 Bakom vampyren hittar du en klump med spagetti ett piller och en laddad pistol''')],
@@ -978,7 +982,7 @@ def borgen():
 
                     global tunnel
 
-                    
+                window.close()
                 window = sg.Window('grotta', layout=[
                 [sg.Text('''vill du kika på andra sidan grottan eller vill du gå hem?''')],
                 [sg.Button('gå hem')],
@@ -1013,7 +1017,7 @@ def borgen():
             if spelare.count("träpåle") < 0:
                 if death.count("uppäten av vampyr") == 0:
                     death = death + ["uppäten av vampyr"]
-                    
+                window.close()
                 window = sg.Window('grotta', layout=[
                 [sg.Text('''(du har ingen träpåle)
                 Death: uppäten av vampyr
@@ -1087,6 +1091,8 @@ def mötesplatsen():
             global death
             if death.count("MEH!") == 0:
                 death = death + ["MEH!"]
+            
+            window.close()
             window = sg.Window('kloak', layout=[
             [sg.Text('''du förvandlar dig till fladdermöss och flyger igenom gallret,
             på andra sidan ser du en skyllt där det står:
@@ -1143,7 +1149,7 @@ def kloaken():
             global death
             if death.count("uppäten av gurg") == 0:
                 death = death + ["uppäten av gurg"]
-
+            window.close()
             window = sg.Window('kloak', layout=[
             [sg.Text('''Motstånd är meningslöst,
             Gurg äter upp dig, ''')],
@@ -1214,6 +1220,7 @@ def kloaken():
         #         start()
         while gurg == "4":
             global romans
+            window.close()
             window = sg.Window('kloak', layout=[
             [sg.Text('''du greppar frenetiskt efter något att och får fram spaghettin,
             du håller fram den som en sköld framför dig.
@@ -1269,7 +1276,7 @@ def kloaken():
                 while event == "neka":
                     if death.count("avrättad") == 0:
                         death = death + ["avrättad"]
-
+                    window.close()
                     window = sg.Window('kloak', layout=[
                     [sg.Text('''"dåligt val"''')],
                     [sg.Text('''Boss fight: agent K''', font='timesnewroman 33')],
@@ -1289,6 +1296,7 @@ def kloaken():
 
             while event == "vänta":
                 global gurg_the_groom
+                window.close()
                 window = sg.Window('kloak', layout=[
                 [sg.Text('''gurg erbjuder dig en (självlysande) svamp som sin gåva til dig, vill du bli ihop med gurg?''')],
                 [sg.Button('acceptera')],
@@ -1422,7 +1430,7 @@ def kloaken():
                         while event == "neka":
                             if death.count("avrättad") == 0:
                                 death = death + ["avrättad"]
-
+                            window.close()
                             window = sg.Window('kloak', layout=[
                             [sg.Text('''"dåligt val"''')],
                             [sg.Text('''Boss fight: agent K''', font='timesnewroman 33')],
@@ -1465,7 +1473,7 @@ def kloaken():
             global death
             if death.count("uppäten av gurg") == 0:
                 death = death + ["uppäten av gurg"]
-
+            window.close()
             window = sg.Window('kloak', layout=[
             [sg.Text('''Motstånd är meningslöst,
             Gurg äter upp dig, ''')],
