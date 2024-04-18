@@ -1083,25 +1083,31 @@ def mötesplatsen():
         os.system('cls')
         if antiklimax == "0":
             start()
-        while antiklimax == "1":
+        while event == "genom gallret":
             global death
             if death.count("MEH!") == 0:
                 death = death + ["MEH!"]
-            val = input(f"""
-            du förvandlar dig till fladdermöss och flyger igenom gallret,
+            window = sg.Window('kloak', layout=[
+            [sg.Text('''du förvandlar dig till fladdermöss och flyger igenom gallret,
             på andra sidan ser du en skyllt där det står:
-            "DEVELOPER NOTE: här finns det inget"
-            du dog av antiklimax
+            "DEVELOPER NOTE: här finns det inget ännu, glöm inte att lägga till något"
+            du dog av antiklimax ''')],
+            [sg.Text(f'''Death: MEH!
+            {len(death)}/7 Deaths hittade''', font='arial 20')],
+            [sg.Button('börja om?')],
+            ])
+
+            event, value = window.read()
             
-            Death: MEH!
-            {len(death)}/7 Deaths hittade
-            börja om: 0
-            → """)
-            if val == "0":
+            if event == "börja om?":
+                window.close()
                 start()
-        while antiklimax == "2":
+
+        while event == "fortsätt framåt mot under staden":
+            window.close()
             kloaken()
     else:
+        window.close()
         kloaken()
 
 #Stadens tunnlar
@@ -1110,305 +1116,368 @@ def kloaken():
     global death
     global ending
     global val
-    print("""
-    du fortsätter framåt till du plötsligt ser en siluett av vad du tror är en man, men något är off,
-    det ser ut som att han smälter. Du snubblar och ljudet du gör för att återfå balansen ekar genom tunneln,
-    figuren tittar på dig.
-    """)
+
     global gurg
     global droger
     while droger.count("piller") > 0:
-        gurg = input("""
-        BOSS FIGHT: gurg the ...guy?
+        window.close()
+        window = sg.Window('kloak', layout=[
+        [sg.Text('''Du fortsätter framåt till du plötsligt ser en siluett av vad du tror är en man, men något är off,
+        det ser ut som att han smälter. Du snubblar och ljudet du gör för att återfå balansen ekar genom tunneln,
+        figuren tittar på dig.''')],
+        [sg.Text('''BOSS FIGHT: gurg the ...guy?''', font='timesnewroman 33')],
+        [sg.Button('fly')],
+        [sg.Button('blockera')],
+        [sg.Button('ducka')],
+        [sg.Button('spaghetti')],
+        [sg.Button('pistol')],
+        [sg.Button('vampyr kraft')],
+        ])
 
-        fly: 1
-        blockera: 2
-        dodge'a: 3
-        spaghetti: 4
-        pistol: 5
-        vampyr kraft: 6
-        → """)
+        event, value = window.read()
+
         os.system('cls')
         if gurg == "0":
             start()
-        while gurg == "1":
+        while event != "spaghetti":
             global death
             if death.count("uppäten av gurg") == 0:
                 death = death + ["uppäten av gurg"]
-            val = input(f"""
-            Motstånd är meningslöst,
-            Gurg äter upp dig,
-            
-            Death: uppäten av gurg
-            {len(death)}/7 Deaths hittade
-            börja om: 0
-            → """)
-            if val == "0":
-                start()
-        while gurg == "2":
-            if death.count("uppäten av gurg") == 0:
-                death = death + ["uppäten av gurg"]
-            val = input(f"""
-            Motstånd är meningslöst,
-            Gurg äter upp dig,
-            
-            Death: uppäten av gurg
-            {len(death)}/7 Deaths hittade
-            börja om: 0
-            → """)
-            if val == "0":
-                start()
-        while gurg == "3":
-            if death.count("uppäten av gurg") == 0:
-                death = death + ["uppäten av gurg"]
-            val = input(f"""
-            Motstånd är meningslöst,
-            Gurg äter upp dig,
-            
-            Death: uppäten av gurg
-            {len(death)}/7 Deaths hittade
-            börja om: 0
-            → """)
-            if val == "0":
-                start()
-        while gurg == "5":
-            if death.count("uppäten av gurg") == 0:
-                death = death + ["uppäten av gurg"]
-            val = input(f"""
-            Du plockar fram pistolen och skjuter vilt mot varelsen,
-            du har avlossat alla skott i pistolen, några kulor träffar och gör skada... inte många nog.
-            Motstånd är meningslöst,
-            Gurg äter upp dig,
-            
-            Death: uppäten av gurg
-            {len(death)}/7 Deaths hittade
-            börja om: 0
-            → """)
-            if val == "0":
-                start()
 
-        while gurg == "6":
-            if death.count("uppäten av gurg") == 0:
-                death = death + ["uppäten av gurg"]
-            val = input(f"""
-            du flyger fram och biter gurg i halsen och ger honom vampirism,
-            han biter dig i halsen tillbaka och ger dig död,
-            
-            Death: uppäten av gurg
-            {len(death)}/7 Deaths hittade
-            börja om: 0
-            → """)
-            if val == "0":
+            window = sg.Window('kloak', layout=[
+            [sg.Text('''Motstånd är meningslöst,
+            Gurg äter upp dig, ''')],
+            [sg.Text(f'''Death: uppäten av gurg
+            {len(death)}/7 Deaths hittade''', font='arial 20')],
+            [sg.Button('börja om?')],
+            ])
+
+            event, value = window.read()
+
+            if val == "börja om?":
+                window.close()
                 start()
+        # while gurg == "2":
+        #     if death.count("uppäten av gurg") == 0:
+        #         death = death + ["uppäten av gurg"]
+        #     val = input(f"""
+        #     Motstånd är meningslöst,
+        #     Gurg äter upp dig,
+            
+        #     Death: uppäten av gurg
+        #     {len(death)}/7 Deaths hittade
+        #     börja om: 0
+        #     → """)
+        #     if val == "0":
+        #         start()
+        # while gurg == "3":
+        #     if death.count("uppäten av gurg") == 0:
+        #         death = death + ["uppäten av gurg"]
+        #     val = input(f"""
+        #     Motstånd är meningslöst,
+        #     Gurg äter upp dig,
+            
+        #     Death: uppäten av gurg
+        #     {len(death)}/7 Deaths hittade
+        #     börja om: 0
+        #     → """)
+        #     if val == "0":
+        #         start()
+        # while gurg == "5":
+        #     if death.count("uppäten av gurg") == 0:
+        #         death = death + ["uppäten av gurg"]
+        #     val = input(f"""
+        #     Du plockar fram pistolen och skjuter vilt mot varelsen,
+        #     du har avlossat alla skott i pistolen, några kulor träffar och gör skada... inte många nog.
+        #     Motstånd är meningslöst,
+        #     Gurg äter upp dig,
+            
+        #     Death: uppäten av gurg
+        #     {len(death)}/7 Deaths hittade
+        #     börja om: 0
+        #     → """)
+        #     if val == "0":
+        #         start()
+
+        # while gurg == "6":
+        #     if death.count("uppäten av gurg") == 0:
+        #         death = death + ["uppäten av gurg"]
+        #     val = input(f"""
+        #     du flyger fram och biter gurg i halsen och ger honom vampirism,
+        #     han biter dig i halsen tillbaka och ger dig död,
+            
+        #     Death: uppäten av gurg
+        #     {len(death)}/7 Deaths hittade
+        #     börja om: 0
+        #     → """)
+        #     if val == "0":
+        #         start()
         while gurg == "4":
             global romans
-            romans = input("""
-            du greppar frenetiskt efter något att och får fram spaghettin,
+            window = sg.Window('kloak', layout=[
+            [sg.Text('''du greppar frenetiskt efter något att och får fram spaghettin,
             du håller fram den som en sköld framför dig.
             Efter en liten stund öppnar du ögonen igen och ser att figuren rodnar,
-            den har tagit spaghettin som en romantisk gest, och vänder sig om för att ge dig något i retur.
+            den har tagit spaghettin som en romantisk gest, och vänder sig om för att ge dig något i retur.''')],
+            [sg.Button('vänta')],
+            [sg.Button('SKJUT!')],
+            ])
 
-            vänta:  1
-            SKJUT:  2
-            → """)
+            event, value = window.read()
+
             os.system('cls')
 
             if romans == "0":
                 start()  
 
-            while romans == "2":
+            while event == "SKJUT!":
                 global agent
-                agent =input("""
-                du plockar fram pistolen, *ditt hjärta slår* du siktar, *ditt hjärta slår* och du skjuter...
+                window.close()
+                window = sg.Window('kloak', layout=[
+                [sg.Text('''du plockar fram pistolen, *ditt hjärta slår* du siktar, *ditt hjärta slår* och du skjuter...
                 PANG! *det piiiper i dina öron* omgivningen byter färg och varelsen faller ihop på golvet.
                 Bakom dig för du att en person klappar händerna "imponerande",
                 när du vänder dig om ser du en person i kostym,
-                de erbjuder dig ett jobb och säger att de kanske kan bota din vampirism om du godkänner.
-            
-                acceptera: 1
-                neka:      2
-                → """)
+                de erbjuder dig ett jobb och säger att de kanske kan bota din vampirism om du godkänner.''')],
+                [sg.Button('acceptera')],
+                [sg.Button('neka')],
+                ])
+
+                event, value = window.read()
+
                 os.system('cls')
                 if agent == "0":
                     start()
-                while agent == "1":
+                while event == "acceptera":
                     if ending.count("Killer") == 0:
                         ending = ending + ["Killer"]
-                    val = input(f"""
-                    "mycket bra val"
-                    
-                    Ending: Killer
-                    {len(ending)}/10 endings hittade
-                    börja om: 0
-                    → """)
-                    if val == "0":
-                        start()
-                while agent == "2":
-                    print("""
-                    "dåligt val"
-                    Boss fight: agent K
 
-                    """)
+                    window.close()
+                    window = sg.Window('kloak', layout=[
+                    [sg.Text(''' "mycket bra val" ''')],
+                    [sg.Text(f'''Ending: Killer
+                    {len(ending)}/10 endings hittade''', font='arial 20')],
+                    [sg.Button('börja om?')],
+                    ])
+
+                    event, value = window.read()
+
+                    if event == "börja om?":
+                        window.close()
+                        start()
+
+                while event == "neka":
                     if death.count("avrättad") == 0:
                         death = death + ["avrättad"]
-                    val = input(f"""
-                    PANG! *det isar i bröstet* innan du hinner reagera har agenten skjutit dig...
-                    "mycket dåligt val"
-                    
-                    death: avrättad
-                    {len(death)}/7 deaths hittade
-                    börja om: 0
-                    → """)
-                    if val == "0":
+
+                    window = sg.Window('kloak', layout=[
+                    [sg.Text('''"dåligt val"''')],
+                    [sg.Text('''Boss fight: agent K''', font='timesnewroman 33')],
+                    [sg.Button('')],
+                    [sg.Text('''PANG! *det isar i bröstet* innan du hinner reagera har agenten skjutit dig...
+                    "mycket dåligt val"''')],
+                    [sg.Text(f'''death: avrättad
+                    {len(death)}/7 deaths hittade''', font='arial 20')],
+                    [sg.Button('börja om?')],
+                    ])
+
+                    event, value = window.read()
+
+                    if event == "börja om?":
+                        window.close()
                         start()     
 
-            while romans == "1":
+            while event == "vänta":
                 global gurg_the_groom
-                gurg_the_groom = input("""
-                gurg erbjuder dig en (självlysande) svamp som sin gåva til dig, vill du bli ihop med gurg?
+                window = sg.Window('kloak', layout=[
+                [sg.Text('''gurg erbjuder dig en (självlysande) svamp som sin gåva til dig, vill du bli ihop med gurg?''')],
+                [sg.Button('acceptera')],
+                [sg.Button('neka')],
+                ])
 
-                acceptera:     1
-                neka:          2
-                → """)
+                event, value = window.read()
+
                 os.system('cls')
                 if gurg_the_groom == "0":
                     start()
-                while gurg_the_groom == "1":
+                while event == "acceptera":
                     if droger.count("gas") > 0:
                         global sim
-                        sim = input("""
-                        du har tagit alla tre droger och har därför blivit upplyst,
-                        du inser att du lever i en simulation... och att det finns andra serverar.
+                        window.close()
+                        window = sg.Window('kloak', layout=[
+                        [sg.Text('''du har tagit alla tre droger (gas, piller, svamp) och har därför blivit upplyst,
+                        du inser att du lever i en simulation... och att det finns andra serverar.''')],
+                        [sg.Button('utforska')],
+                        [sg.Button('återvänd')],
+                        ])
 
-                        utforska: 1
-                        återvänd: 2
-                        → """)
+                        event, value = window.read()
+
                         os.system('cls')
                         if sim == "0":
                             start()
-                        while sim == "1":
+                        while event == "utforska":
                             if ending.count("destroyer of worlds") == 0:
                                 ending = ending + ["destroyer of worlds"]
-                            val = input(f"""
-                            Det tar en stund att åka genom sladdarna,
-                            när du väl anländer har den förra servern slocknat.
-                            
-                            Ending: destroyer of worlds
-                            {len(ending)}/10 endings hittade
-                            börja om: 0
-                            → """)
-                            if val == "0":
+
+                            window.close()
+                            window = sg.Window('kloak', layout=[
+                            [sg.Text('''Det tar en stund att åka genom sladdarna,
+                            när du väl anländer har den förra servern slocknat.''')],
+                            [sg.Text(f'''Ending: destroyer of worlds
+                            {len(ending)}/10 endings hittade''', font='arial 20')],
+                            [sg.Button('börja om?')],
+                            ])
+
+                            event, value = window.read()
+
+                            if event == "börja om?":
+                                window.close()
                                 start()
+
                         if sim=="2":
                             print("du återvänder till jorden")
                             droger = []
                     if ending.count("gurg jn") == 0:
                         ending = ending + ["gurg jn"]
-                    val = input(f"""
-                    du och gurg lever lyckliga i alla era dagar.
+
+                    window.close()
+                    window = sg.Window('kloak', layout=[
+                    [sg.Text('''Du och gurg lever lyckliga i alla era dagar.''')],
+                    [sg.Text(f'''Ending: Ordinary day 2?.. gurg jn the swamp monster vampire?
+                    {len(ending)}/10 endings hittade''', font='arial 20')],
+                    [sg.Button('börja om?')],
+                    ])
+
+                    event, value = window.read()
                     
-                    Ending: Ordinary day 2?.. gurg jn the swamp monster vampire?
-                    {len(ending)}/10 endings hittade
-                    börja om: 0
-                    → """)
-                    
-                    if val == "0":
+                    if event == "börja om?":
+                        window.close()
                         start()  
 
-                while gurg_the_groom == "2":
+                while event == "neka":
                     global nekad
-                    nekad = input("""
-                    gurg ser förvirrad ut
+                    window.close()
+                    window = sg.Window('kloak', layout=[
+                    [sg.Text('''gurg ser förvirrad ut''')],
+                    [sg.Button('vänta')],
+                    [sg.Button('skjut')],
+                    ])
 
-                    vänta: 1
-                    skjut: 2
-                    → """)
+                    event, value = window.read()
+
                     os.system('cls')
                     if nekad == "0":
                         start()
-                    while nekad == "1":
-                        print("""
-                        när han inser vad du gjort blir han förargad
-                        """)
+                    while event == "vänta":
                         if death.count("uppäten av gurg") == 0:
                             death = death + ["uppäten av gurg"]
-                        val = input(f"""
-                        Motstånd är meningslöst,
-                        Gurg äter up dig,
-                        
-                        Death: uppäten av gurg
-                        {len(death)}/7 Deaths hittade
-                        börja om: 0
-                        → """)
-                        if val == "0":
+                        window.close()
+                        window = sg.Window('kloak', layout=[
+                        [sg.Text('''när han förstår vad du menar blir han förargad
+                        Motstånd är meningslöst, Gurg äter up dig,''')],
+                        [sg.Text(f'''Death: uppäten av gurg
+                        {len(death)}/7 Deaths hittade''', font='arial 20')],
+                        [sg.Button('börja om?')],
+                        ])
+
+                        event, value = window.read()
+
+                        if event == "börja om?":
                             start()
-                    while nekad == "2":
-                        agent =input("""
-                        du plockar fram pistolen, *ditt hjärta slår* du siktar, *ditt hjärta slår* och du skjuter...
+                    while event == "skjut":
+                        window.close()
+                        window = sg.Window('kloak', layout=[
+                        [sg.Text('''du plockar fram pistolen, *ditt hjärta slår* du siktar, *ditt hjärta slår* och du skjuter...
                         PANG! *det piiiper i dina öron* omgivningen byter färg och varelsen faller ihop på golvet.
                         Bakom dig för du att en person klappar händerna "imponerande",
                         när du vänder dig om ser du en person i kostym,
-                        de erbjuder dig ett jobb och säger att de kanske kan bota din vampirism om du godkänner.
-                    
-                        acceptera: 1
-                        neka:      2
-                        → """)
+                        de erbjuder dig ett jobb och säger att de kanske kan bota din vampirism om du godkänner.''')],
+                        [sg.Button('acceptera')],
+                        [sg.Button('neka')],
+                        ])
+
+                        event, value = window.read()
+
                         os.system('cls')
-                        while agent == "1":
+
+                        while event == "acceptera":
                             if ending.count("Killer") == 0:
                                 ending = ending + ["Killer"]
-                            val = input(f"""
-                            "mycket bra val"
-                            
-                            Ending: Killer
-                            {len(ending)}/10 endings hittade
-                            börja om: 0
-                            → """)
-                            if val == "0":
+
+                            window.close()
+                            window = sg.Window('kloak', layout=[
+                            [sg.Text(''' "mycket bra val" ''')],
+                            [sg.Text(f'''Ending: Killer
+                            {len(ending)}/10 endings hittade''', font='arial 20')],
+                            [sg.Button('börja om?')],
+                            ])
+
+                            event, value = window.read()
+
+                            if event == "börja om?":
+                                window.close()
                                 start()
-                        while agent == "2":
+
+                        while event == "neka":
                             if death.count("avrättad") == 0:
                                 death = death + ["avrättad"]
-                            print("""
-                            "dåligt val"
-                            Boss fight: agent K
 
-                            """)
-                            val = input(f"""
-                            PANG! *det isar i bröstet* innan du hinner reagera har agenten skjutit dig...
-                            "mycket dåligt val"
-                            
-                            Death: avrättad
-                            {len(death)}/7 Deaths hittade
-                            börja om: 0
-                            → """)
-                            if val == "0":
-                                start()   
+                            window = sg.Window('kloak', layout=[
+                            [sg.Text('''"dåligt val"''')],
+                            [sg.Text('''Boss fight: agent K''', font='timesnewroman 33')],
+                            [sg.Button('')],
+                            [sg.Text('''PANG! *det isar i bröstet* innan du hinner reagera har agenten skjutit dig...
+                            "mycket dåligt val"''')],
+                            [sg.Text(f'''death: avrättad
+                            {len(death)}/7 deaths hittade''', font='arial 20')],
+                            [sg.Button('börja om?')],
+                            ])
+
+                            event, value = window.read()
+
+                            if event == "börja om?":
+                                window.close()
+                                start()     
+
 
                         
 
 
     else:
-        gurg = input("""
-        BOSS FIGHT: gurg the ...guy?
+        window.close()
+        window = sg.Window('kloak', layout=[
+        [sg.Text('''BOSS FIGHT: gurg the ...guy?''', font='timesnewroman 33')],
+        [sg.Button('fly')],
+        [sg.Button('blockera')],
+        [sg.Button('ducka')],
+        [sg.Button('spaghetti')],
+        [sg.Button('pistol')],
+        [sg.Button('vampyr kraft')],
+        ])
 
-        fly:       1
-        blockera:  2
-        dodge'a:   3
-        → """)
+        event, value = window.read()
+
         os.system('cls')
-        while True:
+        if gurg == "0":
+            start()
+        while event != "spaghetti":
+            global death
             if death.count("uppäten av gurg") == 0:
                 death = death + ["uppäten av gurg"]
-            val = input(f"""
-            Motstånd är meningslöst,
-            Gurg äter upp dig,
-            
-            death: uppäten av gurg
-        {len(death)}/7 deaths hittade
-            börja om: 0
-            → """)
-            if val == "0":
+
+            window = sg.Window('kloak', layout=[
+            [sg.Text('''Motstånd är meningslöst,
+            Gurg äter upp dig, ''')],
+            [sg.Text(f'''Death: uppäten av gurg
+            {len(death)}/7 Deaths hittade''', font='arial 20')],
+            [sg.Button('börja om?')],
+            ])
+
+            event, value = window.read()
+
+            if val == "börja om?":
+                window.close()
                 start()
 
 #dra igång allt
