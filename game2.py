@@ -19,6 +19,9 @@ ending = []
 global death
 death = []
 
+global lock
+lock = False
+
 # (reset)
 def reset():
     "Nästan alla variabler måste vara globala så de kan nollställas"
@@ -813,7 +816,7 @@ finns en öppning till tunnlarna under staden, vart vill du gå?''')],
         window.close()
         grottan()
 
-    while riktning == "Tunnlarna under Staden":
+    while event == "Tunnlarna under Staden":
         window.close()
         kloaken()
 
@@ -847,17 +850,19 @@ def grottan():
 def borgen():
     """här slåss du med vampyren, och får grejerna för att besegra gurg i staden, pålen krävs för att besegra vampyren, intelligens krävs för pålen."""
     global inspektion
+    global lock
+    if lock == False:
+        window = sg.Window('grotta', layout=[
+        [sg.Text('''tillslut kommer du fram till en borg i grottan,
+        utanför ligger en kristall, vad vill du? ''')],
+        [sg.Text('', key='-kristall-')],
+        [sg.Button('återvänd åt andra hållet i grottan')],
+        [sg.Button('inbrott i borgen')],
+        [sg.Button('kolla på kristallen')],
+        ])
+        lock = True
 
-    window = sg.Window('grotta', layout=[
-    [sg.Text('''tillslut kommer du fram till en borg i grottan,
-    utanför ligger en kristall, vad vill du? ''')],
-    [sg.Text('', key='kristall')],
-    [sg.Button('återvänd åt andra hållet i grottan')],
-    [sg.Button('inbrott i borgen')],
-    [sg.Button('kolla på kristallen')],
-    ])
-
-    event, value = window.read()
+        event, value = window.read()
 
     os.system('cls')
     if inspektion == "0":
@@ -879,6 +884,8 @@ def borgen():
             du är smart nog att inse att kristallen är gjord av trä,
             detta är ju inte alls en kristall, det är en påle. (+ träpåle)
             """)
+
+            event, value = window.read()
             if spelare.count("träpåle") == 0:
                 spelare = spelare + ["träpåle"]
             print(f"du har {spelare}")
@@ -895,6 +902,7 @@ def borgen():
             räkning = räkning +1
         if hittad < 0:
             window['-kristall-'].update("du är inte smart nog för att förstå kristallen, hur du kan bli smartare?..")
+            event, value = window.read()
             # inspektion = input("""
             #     tillslut kommer du fram till en borg i grottan,
             #     utanför ligger kristallen, vad vill du?
@@ -912,7 +920,7 @@ def borgen():
         innan du hinner reagera flyger något från skuggorna mot dig,
         det bränner till i din hals vilket sprider sig genom dina blodådror till hela kroppen.
                  (Du är vampyr nu)''')],
-        [sg.Text('BOSS FIGHT: vampyren', font='arial 33')]
+        [sg.Text('BOSS FIGHT: vampyren', font='arial 33')],
         [sg.Button('ge upp')],
         [sg.Button('lökig andedräkt')],
         [sg.Button('träpåle i dess hjärta')],
@@ -1470,7 +1478,6 @@ def kloaken():
         if gurg == "0":
             start()
         while event != "spaghetti":
-            global death
             if death.count("uppäten av gurg") == 0:
                 death = death + ["uppäten av gurg"]
             window.close()
